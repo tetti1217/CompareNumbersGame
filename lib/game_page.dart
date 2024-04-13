@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:trump_war/home_page.dart';
 
 class GamePage extends StatefulWidget {
@@ -20,6 +21,13 @@ final comReverseCard4 = Image.asset('images/COM.jpg');
 final comReverseCard5 = Image.asset('images/COM.jpg');
 
 class GamePageState extends State<GamePage> {
+  Alignment _playerCard1Alignment = const Alignment(-0.6, 0.7);
+  void _changePlayerCard1Alignment() {
+    setState(() {
+      _playerCard1Alignment = Alignment.center;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,85 +43,102 @@ class GamePageState extends State<GamePage> {
       body: Padding(
         padding:
             const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
-        child: Column(
-          //大枠の階層
-          children: [
+        child: Stack(
+          children: <Widget>[
             const Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.topLeft,
               child: Text(
                 "COM",
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            Row(
-              //COMカード
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  child: comReverseCard1,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: comReverseCard2,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: comReverseCard3,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: comReverseCard4,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: comReverseCard5,
-                  width: 60,
-                  height: 100,
-                ),
-              ],
+            Align(
+              alignment: const Alignment(-0.6, -0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: comReverseCard1,
+              ),
             ),
-            const SizedBox(height: 400),
-            Row(
-              // Playerカード
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: SizedBox(
-                    child: playerCard1,
-                    width: 60,
-                    height: 100,
-                  ),
-                ),
-                SizedBox(
-                  child: playerCard2,
+            Align(
+              alignment: const Alignment(-0.3, -0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: comReverseCard2,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.0, -0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: comReverseCard3,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.3, -0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: comReverseCard4,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.6, -0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: comReverseCard5,
+              ),
+            ),
+            AnimatedAlign(
+              alignment: _playerCard1Alignment,
+              curve: Curves.ease,
+              duration: const Duration(seconds: 1),
+              child: GestureDetector(
+                onTap: _changePlayerCard1Alignment,
+                child: SizedBox(
                   width: 60,
                   height: 100,
+                  child: playerCard1,
                 ),
-                SizedBox(
-                  child: playerCard3,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: playerCard4,
-                  width: 60,
-                  height: 100,
-                ),
-                SizedBox(
-                  child: playerCard5,
-                  width: 60,
-                  height: 100,
-                ),
-              ],
+              ),
+            ),
+            Align(
+              alignment: const Alignment(-0.3, 0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: playerCard2,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.0, 0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: playerCard3,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.3, 0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: playerCard4,
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.6, 0.7),
+              child: SizedBox(
+                width: 60,
+                height: 100,
+                child: playerCard5,
+              ),
             ),
             const Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.bottomLeft,
               child: Text(
                 "Player",
                 style: TextStyle(fontSize: 30),
