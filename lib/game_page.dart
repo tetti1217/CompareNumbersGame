@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:trump_war/home_page.dart';
+import 'package:trump_war/play_card.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -9,24 +8,7 @@ class GamePage extends StatefulWidget {
   GamePageState createState() => GamePageState();
 }
 
-final playerCard1 = Image.asset('images/Player_1.jpg');
-final playerCard2 = Image.asset('images/Player_2.jpg');
-final playerCard3 = Image.asset('images/Player_3.jpg');
-final playerCard4 = Image.asset('images/Player_4.jpg');
-final playerCard5 = Image.asset('images/Player_5.jpg');
-final comReverseCard1 = Image.asset('images/COM.jpg');
-final comReverseCard2 = Image.asset('images/COM.jpg');
-final comReverseCard3 = Image.asset('images/COM.jpg');
-final comReverseCard4 = Image.asset('images/COM.jpg');
-final comReverseCard5 = Image.asset('images/COM.jpg');
-
 class GamePageState extends State<GamePage> {
-  Alignment _playerCard1Alignment = const Alignment(-0.6, 0.7);
-  void _changePlayerCard1Alignment() {
-    setState(() {
-      _playerCard1Alignment = Alignment.center;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,90 +34,45 @@ class GamePageState extends State<GamePage> {
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            Align(
-              alignment: const Alignment(-0.6, -0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: comReverseCard1,
-              ),
+            PlayCard(
+              image: Image.asset('images/COM.jpg'),
+              initialAlignment: const Alignment(-0.6, -0.7),
             ),
-            Align(
-              alignment: const Alignment(-0.3, -0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: comReverseCard2,
-              ),
+            PlayCard(
+              image: Image.asset('images/COM.jpg'),
+              initialAlignment: const Alignment(-0.3, -0.7),
             ),
-            Align(
-              alignment: const Alignment(0.0, -0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: comReverseCard3,
-              ),
+            PlayCard(
+              image: Image.asset('images/COM.jpg'),
+              initialAlignment: const Alignment(0.0, -0.7),
             ),
-            Align(
-              alignment: const Alignment(0.3, -0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: comReverseCard4,
-              ),
+            PlayCard(
+              image: Image.asset('images/COM.jpg'),
+              initialAlignment: const Alignment(0.3, -0.7),
             ),
-            Align(
-              alignment: const Alignment(0.6, -0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: comReverseCard5,
-              ),
+            PlayCard(
+              image: Image.asset('images/COM.jpg'),
+              initialAlignment: const Alignment(0.6, -0.7),
             ),
-            AnimatedAlign(
-              alignment: _playerCard1Alignment,
-              curve: Curves.ease,
-              duration: const Duration(seconds: 1),
-              child: GestureDetector(
-                onTap: _changePlayerCard1Alignment,
-                child: SizedBox(
-                  width: 60,
-                  height: 100,
-                  child: playerCard1,
-                ),
-              ),
+            PlayCard(
+              image: Image.asset('images/Player_1.jpg'),
+              initialAlignment: const Alignment(-0.6, 0.7),
             ),
-            Align(
-              alignment: const Alignment(-0.3, 0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: playerCard2,
-              ),
+            PlayCard(
+              image: Image.asset('images/Player_2.jpg'),
+              initialAlignment: const Alignment(-0.3, 0.7),
             ),
-            Align(
-              alignment: const Alignment(0.0, 0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: playerCard3,
-              ),
+            PlayCard(
+              image: Image.asset('images/Player_3.jpg'),
+              initialAlignment: const Alignment(0.0, 0.7),
             ),
-            Align(
-              alignment: const Alignment(0.3, 0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: playerCard4,
-              ),
+            PlayCard(
+              image: Image.asset('images/Player_4.jpg'),
+              initialAlignment: const Alignment(0.3, 0.7),
             ),
-            Align(
-              alignment: const Alignment(0.6, 0.7),
-              child: SizedBox(
-                width: 60,
-                height: 100,
-                child: playerCard5,
-              ),
+            PlayCard(
+              image: Image.asset('images/Player_5.jpg'),
+              initialAlignment: const Alignment(0.6, 0.7),
             ),
             const Align(
               alignment: Alignment.bottomLeft,
