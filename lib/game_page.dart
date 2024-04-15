@@ -34,43 +34,43 @@ class GamePageState extends State<GamePage> {
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            PlayCard(
+            ComputerCard(
               image: Image.asset('images/COM.jpg'),
               initialAlignment: const Alignment(-0.6, -0.7),
             ),
-            PlayCard(
+            ComputerCard(
               image: Image.asset('images/COM.jpg'),
               initialAlignment: const Alignment(-0.3, -0.7),
             ),
-            PlayCard(
+            ComputerCard(
               image: Image.asset('images/COM.jpg'),
               initialAlignment: const Alignment(0.0, -0.7),
             ),
-            PlayCard(
+            ComputerCard(
               image: Image.asset('images/COM.jpg'),
               initialAlignment: const Alignment(0.3, -0.7),
             ),
-            PlayCard(
+            ComputerCard(
               image: Image.asset('images/COM.jpg'),
               initialAlignment: const Alignment(0.6, -0.7),
             ),
-            PlayCard(
+            PlayerCard(
               image: Image.asset('images/Player_1.jpg'),
               initialAlignment: const Alignment(-0.6, 0.7),
             ),
-            PlayCard(
+            PlayerCard(
               image: Image.asset('images/Player_2.jpg'),
               initialAlignment: const Alignment(-0.3, 0.7),
             ),
-            PlayCard(
+            PlayerCard(
               image: Image.asset('images/Player_3.jpg'),
               initialAlignment: const Alignment(0.0, 0.7),
             ),
-            PlayCard(
+            PlayerCard(
               image: Image.asset('images/Player_4.jpg'),
               initialAlignment: const Alignment(0.3, 0.7),
             ),
-            PlayCard(
+            PlayerCard(
               image: Image.asset('images/Player_5.jpg'),
               initialAlignment: const Alignment(0.6, 0.7),
             ),
