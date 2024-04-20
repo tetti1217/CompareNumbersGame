@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:playing_cards/playing_cards.dart';
 
 class PlayCard extends StatefulWidget {
-  final Image image;
+  final CardValue value;
+  final void Function(CardValue) onPlayed;
+  final bool? initHided;
   
   const PlayCard({
     super.key,
-    required this.image,
+    required this.value,
+    required this.onPlayed,
+    this.initHided,
   });
 
   @override
@@ -13,24 +18,35 @@ class PlayCard extends StatefulWidget {
 }
 
 class PlayCardState<T extends PlayCard> extends State<T> {
+  bool isHided = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isHided = widget.initHided == true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 60,
       height: 100,
-      child: widget.image,
+      child: PlayingCardView(
+        card: PlayingCard(Suit.clubs, widget.value),
+        showBack: isHided == true,
+      ),
     );
   }
 }
 
 class PlayerCard extends PlayCard {
-  final Alignment initialAlignment;
+  final Alignment alignment;
   
   const PlayerCard({
     super.key,
-    required super.image,
-    required this.initialAlignment,
+    required super.value,
+    required super.onPlayed,
+    required this.alignment,
   });
 
   @override
@@ -38,24 +54,14 @@ class PlayerCard extends PlayCard {
 }
 
 class PlayerCardState extends PlayCardState<PlayerCard> {
-  late Alignment _alignment;
-
-  @override
-  void initState() {
-    super.initState();
-    _alignment = widget.initialAlignment;
-  }
-
   void _onTap() {
-    setState(() {
-      _alignment = const Alignment(0.0, 0.3);
-    });
+    widget.onPlayed(widget.value);
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedAlign(
-      alignment: _alignment,
+      alignment: widget.alignment,
       curve: Curves.ease,
       duration: const Duration(seconds: 1),
       child: GestureDetector(
@@ -67,12 +73,14 @@ class PlayerCardState extends PlayCardState<PlayerCard> {
 }
 
 class ComputerCard extends PlayCard {
-  final Alignment initialAlignment;
+  final Alignment alignment;
   
   const ComputerCard({
     super.key,
-    required super.image,
-    required this.initialAlignment,
+    required super.value,
+    required super.onPlayed,
+    super.initHided,
+    required this.alignment,
   });
 
   @override
@@ -80,24 +88,18 @@ class ComputerCard extends PlayCard {
 }
 
 class ComputerCardState extends PlayCardState<ComputerCard> {
-  late Alignment _alignment;
-
-  @override
-  void initState() {
-    super.initState();
-    _alignment = widget.initialAlignment;
-  }
 
   void _onTap() {
     setState(() {
-      _alignment = const Alignment(0.0, -0.3);
+      isHided = false;
     });
+    widget.onPlayed(widget.value);
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedAlign(
-      alignment: _alignment,
+      alignment: widget.alignment,
       curve: Curves.ease,
       duration: const Duration(seconds: 1),
       child: GestureDetector(
