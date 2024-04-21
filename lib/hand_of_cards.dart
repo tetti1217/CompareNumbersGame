@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
+import 'package:trump_war/game_page.dart';
 import 'package:trump_war/play_card.dart';
 
 const List<CardValue> allHandOfCards = [
@@ -63,10 +64,12 @@ class HandOfCardsState extends State<HandOfCards> {
 
 class ComputerHandOfCards extends StatefulWidget {
   final void Function(CardValue)? onPlayed;
+  final Phase phase;
 
   const ComputerHandOfCards({
     super.key,
     this.onPlayed,
+    required this.phase,
   });
 
   @override
@@ -77,7 +80,22 @@ class ComputerHandOfCardstate extends State<ComputerHandOfCards> {
   final List<CardValue> _handOfCards = [...allHandOfCards];
   final List<CardValue> _playedCards = [];
 
-  void _onPlayed (CardValue value) {
+  @override
+  void initState() {
+    super.initState();
+    _handOfCards.shuffle();
+  }
+
+  @override
+  void didUpdateWidget(ComputerHandOfCards oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.phase == Phase.player && widget.phase == Phase.computer) {
+      _onPlayed();
+    }
+  }
+
+  void _onPlayed () {
+    CardValue value = _handOfCards.last;
     if (widget.onPlayed != null) {
       widget.onPlayed!(value);
     }
@@ -104,9 +122,8 @@ class ComputerHandOfCardstate extends State<ComputerHandOfCards> {
         visible: _handOfCards.contains(v) || _playedCards.last == v,
         child: ComputerCard(
           value: v,
-          onPlayed: _onPlayed,
           alignment: _calculateAlliment(v, _handOfCards, _playedCards),
-          initHided: true,
+          isHided: !(_playedCards.isNotEmpty && v == _playedCards.last),
         ),
       )).toList(),
     );
