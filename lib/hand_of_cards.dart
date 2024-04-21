@@ -1,15 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:playing_cards/playing_cards.dart';
 import 'package:trump_war/game_page.dart';
 import 'package:trump_war/play_card.dart';
-
-const List<CardValue> allHandOfCards = [
-  CardValue.ace,
-  CardValue.two,
-  CardValue.three,
-  CardValue.four,
-  CardValue.five,
-];
 
 class HandOfCards extends StatefulWidget {
   final void Function(CardValue)? onPlayed;
@@ -23,52 +17,88 @@ class HandOfCards extends StatefulWidget {
   HandOfCardsState createState() => HandOfCardsState();
 }
 
-class HandOfCardsState extends State<HandOfCards> {
-  final List<CardValue> _handOfCards = [...allHandOfCards];
+class HandOfCardsState <T extends HandOfCards> extends State<T>{
+  final List<CardValue> _allHandOfCards = [
+    CardValue.ace,
+    CardValue.two,
+    CardValue.three,
+    CardValue.four,
+    CardValue.five,
+  ];
+  late final List<CardValue> _handOfCards = [..._allHandOfCards];
   final List<CardValue> _playedCards = [];
 
   void _onPlayed (CardValue value) {
-    if (widget.onPlayed != null) {
-      widget.onPlayed!(value);
-    }
     setState(() {
       _handOfCards.remove(value);
       _playedCards.add(value);
     });
+    if (widget.onPlayed != null) {
+      widget.onPlayed!(value);
+    }
   }
 
-  Alignment _calculateAlliment (CardValue value, List<CardValue> handsOfCards, List<CardValue> playedCards) {
+  double _calculateXAlliment (CardValue value, List<CardValue> handOfCards, List<CardValue> playedCards) {
     if (playedCards.contains(value)) {
-      return const Alignment(0.0, 0.3);
+      return 0.0;
     }
+    return - (handOfCards.length - 1) * 0.15 + handOfCards.indexOf(value) * 0.3;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: _allHandOfCards.map((v) => PlayCard(
+        value: v,
+      )).toList(),
+    );
+  }
+}
+
+class PlayerHandOfCards extends HandOfCards {
+  final bool tapable;
+
+  const PlayerHandOfCards({
+    super.key,
+    super.onPlayed,
+    required this.tapable,
+  });
+
+  @override
+  PlayerHandOfCardsState createState() => PlayerHandOfCardsState();
+}
+
+class PlayerHandOfCardsState extends HandOfCardsState<PlayerHandOfCards>{
+
+  Alignment _calculateAlliment (CardValue value, List<CardValue> handOfCards, List<CardValue> playedCards) {
     return Alignment(
-      - (handsOfCards.length - 1) * 0.15 + handsOfCards.indexOf(value) * 0.3,
-      0.7
+      super._calculateXAlliment(value, handOfCards, playedCards),
+      playedCards.contains(value) ? 0.3 : 0.7,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: allHandOfCards.map((v) => Visibility(
+      children: _allHandOfCards.map((v) => Visibility(
         visible: _handOfCards.contains(v) || _playedCards.last == v,
         child: PlayerCard(
           value: v,
           onPlayed: _onPlayed,
           alignment: _calculateAlliment(v, _handOfCards, _playedCards),
+          tapable: widget.tapable,
         ),
       )).toList(),
     );
   }
 }
 
-class ComputerHandOfCards extends StatefulWidget {
-  final void Function(CardValue)? onPlayed;
+class ComputerHandOfCards extends HandOfCards {
   final Phase phase;
 
   const ComputerHandOfCards({
     super.key,
-    this.onPlayed,
+    super.onPlayed,
     required this.phase,
   });
 
@@ -76,49 +106,29 @@ class ComputerHandOfCards extends StatefulWidget {
   ComputerHandOfCardstate createState() => ComputerHandOfCardstate();
 }
 
-class ComputerHandOfCardstate extends State<ComputerHandOfCards> {
-  final List<CardValue> _handOfCards = [...allHandOfCards];
-  final List<CardValue> _playedCards = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _handOfCards.shuffle();
-  }
+class ComputerHandOfCardstate extends HandOfCardsState<ComputerHandOfCards> {
+  var random = Random();
 
   @override
   void didUpdateWidget(ComputerHandOfCards oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.phase == Phase.player && widget.phase == Phase.computer) {
-      _onPlayed();
+      CardValue value = _handOfCards[random.nextInt(_handOfCards.length)];
+      _onPlayed(value);
     }
   }
 
-  void _onPlayed () {
-    CardValue value = _handOfCards.last;
-    if (widget.onPlayed != null) {
-      widget.onPlayed!(value);
-    }
-    setState(() {
-      _handOfCards.remove(value);
-      _playedCards.add(value);
-    });
-  }
-
-  Alignment _calculateAlliment (CardValue value, List<CardValue> handsOfCards, List<CardValue> playedCards) {
-    if (playedCards.contains(value)) {
-      return const Alignment(0.0, -0.3);
-    }
+  Alignment _calculateAlliment (CardValue value, List<CardValue> handOfCards, List<CardValue> playedCards) {
     return Alignment(
-      - (handsOfCards.length - 1) * 0.15 + handsOfCards.indexOf(value) * 0.3,
-      -0.7
+      super._calculateXAlliment(value, handOfCards, playedCards),
+      playedCards.contains(value) ? - 0.3 : - 0.7,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: allHandOfCards.map((v) => Visibility(
+      children: _allHandOfCards.map((v) => Visibility(
         visible: _handOfCards.contains(v) || _playedCards.last == v,
         child: ComputerCard(
           value: v,

@@ -38,10 +38,11 @@ class GamePageState extends State<GamePage> {
   int _timesOfComputerWin = 0;
   int _gameCount = 1;
 
-  void _onPlayerPlayed (CardValue value) {
+  Future<void> _onPlayerPlayed (CardValue value) async {
     if (_phase != Phase.player) {
       return;
     }
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       _playerPlayedCard = value;
       _phase = Phase.computer;
@@ -52,7 +53,7 @@ class GamePageState extends State<GamePage> {
     if (_phase != Phase.computer) {
       return;
     }
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       _computerPlayedCard = value;
       _phase = Phase.judge;
@@ -114,20 +115,20 @@ class GamePageState extends State<GamePage> {
       ),
       body: Padding(
         padding:
-            EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
+            const EdgeInsets.only(top: 10, right: 10, bottom: 10, left: 10),
         child: Stack(
           children: <Widget>[
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                '$_phase',
-                style: TextStyle(fontSize: 30),
+                _phase == Phase.judge ? _judgeStatus!.name : _phase.name,
+                style: const TextStyle(fontSize: 30),
               ),
             ),
-            Align(
+            const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'COM ${_judgeStatus == JudgeStatus.computerWin ? 'Win' : ''} ${_judgeStatus == JudgeStatus.draw ? 'draw' : ''}',
+                'COM',
                 style: TextStyle(fontSize: 30),
               ),
             ),
@@ -135,14 +136,14 @@ class GamePageState extends State<GamePage> {
               alignment: Alignment.topRight,
               child: Text(
                 '$_timesOfComputerWin',
-                style: TextStyle(fontSize: 30),
+                style: const TextStyle(fontSize: 30),
               ),
             ),
             _phase == Phase.finalJudge ? Align(
               alignment: Alignment.center,
               child: Text(
-                '${_timesOfComputerWin < _timesOfPlayerWin ? 'Player Win' : 'Computer Win'}',
-                style: TextStyle(fontSize: 30),
+                _timesOfComputerWin < _timesOfPlayerWin ? 'Player Win' : 'Computer Win',
+                style: const TextStyle(fontSize: 30),
               ),
             ) : Stack(
               children: [
@@ -150,15 +151,16 @@ class GamePageState extends State<GamePage> {
                   onPlayed: _onComputerPlayed,
                   phase: _phase,
                 ),
-                HandOfCards(
+                PlayerHandOfCards(
                   onPlayed: _onPlayerPlayed,
+                  tapable: _phase == Phase.player,
                 ),
               ],
             ),
-            Align(
+            const Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                'Player ${_judgeStatus == JudgeStatus.playerWin ? 'Win' : ''} ${_judgeStatus == JudgeStatus.draw ? 'draw' : ''}',
+                'Player',
                 style: TextStyle(fontSize: 30),
               ),
             ),
@@ -166,7 +168,7 @@ class GamePageState extends State<GamePage> {
               alignment: Alignment.bottomRight,
               child: Text(
                 '$_timesOfPlayerWin',
-                style: TextStyle(fontSize: 30),
+                style: const TextStyle(fontSize: 30),
               ),
             ),
           ],

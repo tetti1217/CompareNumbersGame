@@ -33,12 +33,14 @@ class PlayCardState<T extends PlayCard> extends State<T> {
 class PlayerCard extends PlayCard {
   final Alignment alignment;
   final void Function(CardValue) onPlayed;
+  final bool tapable;
   
   const PlayerCard({
     super.key,
     required super.value,
     required this.onPlayed,
     required this.alignment,
+    required this.tapable,
   });
 
   @override
@@ -47,6 +49,9 @@ class PlayerCard extends PlayCard {
 
 class PlayerCardState extends PlayCardState<PlayerCard> {
   void _onTap() {
+    if (!widget.tapable) {
+      return;
+    }
     widget.onPlayed(widget.value);
   }
 
