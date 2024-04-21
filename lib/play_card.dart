@@ -3,14 +3,12 @@ import 'package:playing_cards/playing_cards.dart';
 
 class PlayCard extends StatefulWidget {
   final CardValue value;
-  final void Function(CardValue) onPlayed;
-  final bool? initHided;
+  final bool? isHided;
   
   const PlayCard({
     super.key,
     required this.value,
-    required this.onPlayed,
-    this.initHided,
+    this.isHided,
   });
 
   @override
@@ -18,13 +16,6 @@ class PlayCard extends StatefulWidget {
 }
 
 class PlayCardState<T extends PlayCard> extends State<T> {
-  bool isHided = false;
-
-  @override
-  void initState() {
-    super.initState();
-    isHided = widget.initHided == true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +24,7 @@ class PlayCardState<T extends PlayCard> extends State<T> {
       height: 100,
       child: PlayingCardView(
         card: PlayingCard(Suit.clubs, widget.value),
-        showBack: isHided == true,
+        showBack: widget.isHided == true,
       ),
     );
   }
@@ -41,12 +32,15 @@ class PlayCardState<T extends PlayCard> extends State<T> {
 
 class PlayerCard extends PlayCard {
   final Alignment alignment;
+  final void Function(CardValue) onPlayed;
+  final bool tapable;
   
   const PlayerCard({
     super.key,
     required super.value,
-    required super.onPlayed,
+    required this.onPlayed,
     required this.alignment,
+    required this.tapable,
   });
 
   @override
@@ -55,6 +49,9 @@ class PlayerCard extends PlayCard {
 
 class PlayerCardState extends PlayCardState<PlayerCard> {
   void _onTap() {
+    if (!widget.tapable) {
+      return;
+    }
     widget.onPlayed(widget.value);
   }
 
@@ -78,8 +75,7 @@ class ComputerCard extends PlayCard {
   const ComputerCard({
     super.key,
     required super.value,
-    required super.onPlayed,
-    super.initHided,
+    super.isHided,
     required this.alignment,
   });
 
@@ -89,23 +85,13 @@ class ComputerCard extends PlayCard {
 
 class ComputerCardState extends PlayCardState<ComputerCard> {
 
-  void _onTap() {
-    setState(() {
-      isHided = false;
-    });
-    widget.onPlayed(widget.value);
-  }
-
   @override
   Widget build(BuildContext context) {
     return AnimatedAlign(
       alignment: widget.alignment,
       curve: Curves.ease,
       duration: const Duration(seconds: 1),
-      child: GestureDetector(
-        onTap: _onTap,
-        child: super.build(context),
-      ),
+      child: super.build(context),
     );
   }
 }
